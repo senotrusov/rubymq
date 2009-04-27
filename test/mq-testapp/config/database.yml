@@ -1,0 +1,16 @@
+development:
+  adapter: postgresql
+  host: localhost
+  database: 
+  username: 
+  password: 
+  encoding: UTF8
+  schema_order: public
+production:
+  adapter: postgresql
+  host: localhost
+  database: 
+  username: 
+  password: 
+  encoding: UTF8
+  schema_order: public

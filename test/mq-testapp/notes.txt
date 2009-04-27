@@ -1,0 +1,9 @@
+cd mq-server; rubymq_server
+
+cd mq-testapp; rubymq_app periodic
+
+cd mq-testapp; rubymq_app print_app
+cd mq-testapp; rubymq_app post_print_app
+
+ruby send.rb
+ruby send-scheduled.rb

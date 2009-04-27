@@ -1,0 +1,54 @@
+#!/usr/bin/env ruby
+# 
+#  Copyright 2006-2008 Stanislav Senotrusov <senotrusov@gmail.com>
+# 
+#  Licensed under the Apache License, Version 2.0 (the "License");
+#  you may not use this file except in compliance with the License.
+#  You may obtain a copy of the License at
+# 
+#      http://www.apache.org/licenses/LICENSE-2.0
+# 
+#  Unless required by applicable law or agreed to in writing, software
+#  distributed under the License is distributed on an "AS IS" BASIS,
+#  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#  See the License for the specific language governing permissions and
+#  limitations under the License.
+
+
+$KCODE = "UTF8"
+
+require 'rubymq'
+require 'rubymq_facets/more/process_controller'
+require 'rubymq_facets/more/argv_parser'
+
+options = ArgvParser.new ARGV
+options.header << "RubyMQ -- Ruby's message queueing standalone application"
+options.heading_option "APPLICATION", "RybyMQ application name"
+options.option "--only-endpoints NAME...", "Start only some of endpoints defined in application"
+
+ProcessController.process(options) do |options, logger|
+  RubyMQ.logger = logger
+  RubyMQ.environment = options["environment"]
+
+  if File.directory?("gems/gems")
+    Gem.clear_paths
+    Gem.path.unshift(Dir.pwd / "gems")
+  end
+  
+  if File.directory?("config") && File.exist?("config/mq_init.rb")
+    require 'config/mq_init'
+  end
+  
+  raise("APPLICATION not defined") unless options["APPLICATION"]
+  
+  gem_name, application_name = options["APPLICATION"].split(/\//)
+  application_name = gem_name unless application_name
+  
+  require gem_name if Gem.available?(gem_name)
+  
+  unless app_factory = RubyMQ.applications[application_name.to_sym]
+    raise "APPLICATION '#{application_name}' misspelled or not defined" 
+  end
+
+  RubyMQ::Application::Daemon.new(app_factory, options)
+end
