@@ -14,8 +14,8 @@
 #  limitations under the License.
 
 
-require 'rubymq_facets'
-require 'rubymq_facets/more/thread_reaper'
+require 'rubymq-facets'
+require 'rubymq-facets/more/thread_reaper'
 
 class RubyMQ::AbstractApplication::Daemon
   def initialize

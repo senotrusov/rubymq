@@ -18,8 +18,8 @@
 $KCODE = "UTF8"
 
 require 'rubymq'
-require 'rubymq_facets/more/process_controller'
-require 'rubymq_facets/more/argv_parser'
+require 'rubymq-facets/more/process_controller'
+require 'rubymq-facets/more/argv_parser'
 
 options = ArgvParser.new ARGV
 options.header << "RubyMQ -- Ruby's message queueing standalone application"
@@ -27,6 +27,9 @@ options.heading_option "APPLICATION", "RybyMQ application name"
 options.option "--only-endpoints NAME...", "Start only some of endpoints defined in application"
 
 ProcessController.process(options) do |options, logger|
+
+  raise("APPLICATION must be specified as command line argument") unless options["APPLICATION"]
+
   RubyMQ.logger = logger
   RubyMQ.environment = options["environment"]
 
@@ -34,12 +37,22 @@ ProcessController.process(options) do |options, logger|
     Gem.clear_paths
     Gem.path.unshift(Dir.pwd / "gems")
   end
-  
-  if File.directory?("config") && File.exist?("config/mq_init.rb")
-    require 'config/mq_init'
+
+  if Gem.available?('gem-here')
+    require 'gem-here'
   end
   
-  raise("APPLICATION not defined") unless options["APPLICATION"]
+  if File.directory?("config") && File.exist?("config/mq-init.rb")
+    require 'config/mq-init'
+  end
+
+  if File.directory?("config") && File.directory?("config/mq-applications") && File.exist?("config/mq-applications/#{options["APPLICATION"]}.rb")
+    require "config/mq-applications/#{options["APPLICATION"]}.rb"
+  end
+
+  if File.directory?("app") && File.directory?("app/mq")
+    GreedyLoader.push_path :"mq-app", "app/mq"
+  end
   
   gem_name, application_name = options["APPLICATION"].split(/\//)
   application_name = gem_name unless application_name
@@ -47,7 +60,7 @@ ProcessController.process(options) do |options, logger|
   require gem_name if Gem.available?(gem_name)
   
   unless app_factory = RubyMQ.applications[application_name.to_sym]
-    raise "APPLICATION '#{application_name}' misspelled or not defined" 
+    raise "APPLICATION '#{application_name}' misspelled or not defined in config/mq-init.rb or config/mq-applications/\#{APPLICATION}.rb"
   end
 
   RubyMQ::Application::Daemon.new(app_factory, options)

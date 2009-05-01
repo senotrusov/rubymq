@@ -14,8 +14,8 @@
 #  limitations under the License.
 
 
-require 'rubymq_facets/thread'
-require 'rubymq_facets/more/prioritized_queue'
+require 'rubymq-facets/thread'
+require 'rubymq-facets/more/prioritized_queue'
 
 module RubyMQ::Server
   autoload :ClientPool,    'rubymq/server/client_pool'

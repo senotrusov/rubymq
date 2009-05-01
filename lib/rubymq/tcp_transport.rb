@@ -14,7 +14,7 @@
 #  limitations under the License.
 
 
-require 'rubymq_facets/core/tcp_socket'
+require 'rubymq-facets/core/tcp_socket'
 
 module RubyMQ::TCPTransport
   SOCKET_EXEPTIONS = [

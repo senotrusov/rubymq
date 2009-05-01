@@ -212,7 +212,7 @@ notices and license terms. Your use of the source code for the
 these subcomponents is subject to the terms and
 conditions of the following licenses.
 
-See LICENCE file in rubymq_facets (RubyMQ helper library)
+See LICENCE file in rubymq-facets (RubyMQ helper library)
 
 For the following subcomponent licenced from rubyonrails.org:
     lib/rubymq/message_inspector.rb

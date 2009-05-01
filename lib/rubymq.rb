@@ -14,9 +14,9 @@
 #  limitations under the License.
 
 
-require 'rubymq_facets'
-require 'rubymq_facets/core_ext'
-require 'rubymq_facets/externals/greedy_loader'
+require 'rubymq-facets'
+require 'rubymq-facets/core_ext'
+require 'rubymq-facets/externals/greedy_loader'
 
 module RubyMQ
   class ApplicationConfigError    < StandardError; end
@@ -31,7 +31,7 @@ module RubyMQ
     attr_accessor :logger, :environment
     
     def emergency_logger
-      require 'rubymq_facets/externals/logger' unless defined?(Merb::Logger)
+      require 'rubymq-facets/externals/logger' unless defined?(Merb::Logger)
       @emergency_logger ||= Merb::Logger.new(STDOUT, :debug, " ~ ", true)
     end
     
@@ -44,7 +44,7 @@ module RubyMQ
       when :activerecord
         
         require 'activerecord'
-        require 'rubymq_facets/active_record'
+        require 'rubymq-facets/active_record'
         require 'yaml'
         require 'erb'
         
@@ -54,7 +54,7 @@ module RubyMQ
         ActiveRecord::Base.configurations = YAML::load(ERB.new(IO.read('config/database.yml')).result)
         ActiveRecord::Base.establish_connection RubyMQ.environment
 
-        require 'rubymq_facets/thread'
+        require 'rubymq-facets/thread'
         
         Thread.new_with_exception_handling(RubyMQ.logger || RubyMQ.emergency_logger, lambda { Process.exit!(50) }) do
           Thread.current.priority = -5

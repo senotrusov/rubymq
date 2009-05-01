@@ -18,7 +18,7 @@
 $KCODE = "UTF8"
 
 require 'rubymq'
-require 'rubymq_facets/more/process_controller'
+require 'rubymq-facets/more/process_controller'
 
 ProcessController.process do |options, logger|
   RubyMQ.logger = logger

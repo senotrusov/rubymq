@@ -14,7 +14,7 @@
 #  limitations under the License.
 
 
-require 'rubymq_facets/more/threadsafe_sequence'
+require 'rubymq-facets/more/threadsafe_sequence'
 
 class RubyMQ::Server::ClientSession
   

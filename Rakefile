@@ -37,11 +37,11 @@ spec = Gem::Specification.new do |s|
   s.files         = %w(README LICENSE Rakefile) + Dir.glob("{lib,spec,test}/**/*")
   
   s.bindir        = "bin"
-  s.executables   = %w( rubymq_server rubymq_app rubymq_test)
+  s.executables   = %w( rubymq-server rubymq-app rubymq-test)
 
   s.add_dependency 'uuid',         '>= 1.0.4'
   s.add_dependency 'sqlite3-ruby', '>= 1.2.1'
-  s.add_dependency 'rubymq_facets', '3.0.0'
+  s.add_dependency 'rubymq-facets', '3.0.0'
 end
 
 Rake::GemPackageTask.new(spec) do |pkg|

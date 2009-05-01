@@ -14,7 +14,7 @@
 #  limitations under the License.
  
 
-require 'rubymq_facets/core/thread'
+require 'rubymq-facets/core/thread'
 
 class RubyMQ::Client
   def initialize config = {}
