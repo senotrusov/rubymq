@@ -28,6 +28,16 @@ module RubyMQ::EndpointApplication
   attr_reader :client, :sequence_number, :consumer
   attr_accessor :message
 
+  def self.included mq_app
+    mq_app.extend RubyMQ::EndpointApplicationClassMethods
+
+    mq_app.class_inheritable_array :before_filters
+    mq_app.class_inheritable_array :after_filters
+
+    mq_app.before_filters = []
+    mq_app.after_filters = []
+  end
+
   def process_message client, message, sequence_number, consumer, process_method = :process, *args
     @client = client
     @message = message
@@ -37,9 +47,9 @@ module RubyMQ::EndpointApplication
     log_before_processing(message) if @logger.debug?
     
     if @transactional && RubyMQ.initialized_orm == :activerecord
-      ActiveRecord::Base.transaction {invoke_process_method(process_method, *args)}
+      ActiveRecord::Base.transaction {dispatch_process_method(process_method, *args)}
     else
-      invoke_process_method(process_method, *args)
+      dispatch_process_method(process_method, *args)
     end
   end
 
@@ -47,22 +57,48 @@ module RubyMQ::EndpointApplication
     @logger.debug("Processing message from #{@consumer.name} " + message.inspect)
   end
 
-  def invoke_process_method(process_method, *args)
+  def dispatch_process_method(process_method, *args)
     if self.respond_to?(call_method = "#{@consumer.name}_#{@endpoint.name}")
-      __send__(call_method, *args)
+      invoke_process_method(call_method, *args)
       
     elsif self.respond_to?(@consumer.name)
-      __send__(@consumer.name, *args)
+      invoke_process_method(@consumer.name, *args)
 
     elsif self.respond_to?(@endpoint.name)
-      __send__(@endpoint.name, *args)
+      invoke_process_method(@endpoint.name, *args)
 
     elsif self.respond_to?(process_method)
-      __send__(process_method, *args)
+      invoke_process_method(process_method, *args)
       
     else
       raise "No process method like '#{@consumer.name}_#{@endpoint.name}', '#{@consumer.name}', '#{@endpoint.name}' or '#{process_method}' found in #{self.class}"
     end
+  end
+
+  def invoke_process_method(process_method, *args)
+    if apply_before_filters(process_method) != :stop
+      __send__(process_method, *args)
+      apply_after_filters process_method
+    end
+  end
+
+  def apply_before_filters process_method
+    apply_filters(before_filters, process_method)
+  end
+
+  def apply_after_filters process_method
+    apply_filters(after_filters, process_method)
+  end
+
+  def apply_filters filters, process_method
+    filters.each do |filter|
+      if filter.suitable?(process_method)
+        if filter.call_method
+          return :stop if __send__(filter.call_method) == :stop
+        end
+      end
+    end
+
   end
 
   # transmit channel, message

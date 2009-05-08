@@ -115,6 +115,8 @@ module RubyMQ
   autoload :Application,           'rubymq/application'
   autoload :AbstractApplication,   'rubymq/abstract_application'
   autoload :EndpointApplication,   'rubymq/endpoint_application'
+  autoload :EndpointApplicationClassMethods, 'rubymq/endpoint_application_class_methods'
+  autoload :EndpointApplicationFilter,       'rubymq/endpoint_application_filter'
 
   # TODO: 3-5 seconds timeout for webserver client
   # TODO: Under virtualisation timer ticks may be irregular. Timeout error may occur if time sync quickly jump to future.
