@@ -1,28 +1,18 @@
 RubyMQ
 ======
 
+Ruby message-oriented middleware - messaging application framework and store-and-forward messaging server.
+
+Currently obsolete in favor of Redis as a messaging server.
+
+
 Licensing
 ---------
 Apache License 2.0, see the "LICENSE" file for details.
 
 
-Release numbering
------------------
-Unstable release have odd first number (1.0.0, 3.0.0, 5.0.0, etc.)
-Stable releases have even first number (2.0.0, 4.0.0, 6.0.0, etc.)
-
-
-Release history/plan
---------------------
+Release history
+---------------
 1.0 - mobstyle.ru in-house release (messages/services/service_destinations)
 2.0 - mobstyle.ru in-house release (mq_*)
-
 3.0 - first public release, messaging server and messaging application framework under development
-4.0 - stable, full-featured release of messaging server and messaging application framework
-
-5.0 - speed and clustering enchantments?
-
-
-Starting a server
------------------
-
