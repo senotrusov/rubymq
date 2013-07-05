@@ -1,7 +1,7 @@
 RubyMQ
 ======
 
-Ruby message-oriented middleware - messaging application framework and store-and-forward messaging server.
+Ruby message-oriented middleware - a messaging application framework and a store-and-forward messaging server.
 
 Currently obsolete in favor of Redis as a messaging server.
 
@@ -15,4 +15,4 @@ Release history
 ---------------
 * **1.0** - mobstyle.ru in-house release (messages/services/service_destinations)
 * **2.0** - mobstyle.ru in-house release (mq_*)
-* **3.0** - first public release, messaging server and messaging application framework under development
+* **3.0** - first public release
