@@ -3,7 +3,7 @@ RubyMQ
 
 Ruby message-oriented middleware - a messaging application framework and a store-and-forward messaging server.
 
-Although it currently became obsolete in favor of Redis lists, I leave it here as an example of my code.
+Although it currently became obsolete in favor of Redis lists, I leave it here in the memory of my past efforts.
 
 
 Licensing
