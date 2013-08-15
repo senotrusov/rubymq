@@ -1,9 +1,9 @@
 RubyMQ
 ======
 
-Message-oriented middleware for Ruby, implementation of AMQP protocol and a messaging application framework with a store-and-forward messaging server.
+Message-oriented middleware for Ruby, implementation of AMQP protocol and messaging application framework with store-and-forward messaging server.
 
-Although it currently became obsolete, I leave it here in the memory of my past efforts.
+Although it currently became obsolete, I left it here in the memory of my past efforts.
 
 
 Licensing
